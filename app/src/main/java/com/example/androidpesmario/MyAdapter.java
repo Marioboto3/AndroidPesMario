@@ -1,6 +1,7 @@
 package com.example.androidpesmario;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.provider.Telephony;
 import android.support.v7.widget.RecyclerView;
@@ -65,18 +66,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Partido partido = values.get(position);
-        holder.txtHeader.setText(String.valueOf(partido.getLocal()));
-        holder.txtFooter.setText("1: "+ String.valueOf(partido.getCuota_1()));
-        /*holder.txtHeader.setOnClickListener(new OnClickListener() {
+        holder.txtHeader.setText(String.valueOf(partido.getLocal())+" vs " + String.valueOf(partido.getVisitante()));
+        holder.txtFooter.setText("1: "+ String.valueOf(partido.getCuota_1())+" - X: "+ String.valueOf(partido.getCuota_X())+" - 2: "+ String.valueOf(partido.getCuota_2()));
+        holder.txtHeader.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent((activity.getApplicationContext()), InfoTrack.class);
-                myIntent.putExtra("Title",track_in.getTitle());
-                myIntent.putExtra("Id",track_in.getId());
-                myIntent.putExtra("Singer", track_in.getSinger());
+                holder.txtHeader.setText(String.valueOf(partido.getLocal()));
+
+                Intent myIntent = new Intent(activity.getApplicationContext(), InfoPartido.class);
+                myIntent.putExtra("Local:",partido.getLocal());
+                myIntent.putExtra("Visitante",partido.getVisitante());
                 activity.startActivity(myIntent);
             }
-        });*/
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

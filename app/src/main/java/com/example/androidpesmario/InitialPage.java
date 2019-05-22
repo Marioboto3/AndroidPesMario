@@ -30,7 +30,6 @@ public class InitialPage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.initialpage);
 
-        final TextView text = (TextView)findViewById(R.id.texto);
         recycler = (RecyclerView)findViewById(R.id.my_recycler_view);
         recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recycler.setHasFixedSize(true);
@@ -40,17 +39,14 @@ public class InitialPage extends AppCompatActivity{
             public void onResponse(Call<List<Partido>> call, Response<List<Partido>> response) {
                 if (!response.isSuccessful()) {
                     listDatos = response.body();
-                    text.setText("fuego");
                 }
                 listDatos = response.body();
-                text.setText("good");
                 mAdapter = new MyAdapter(listDatos, InitialPage.this);
                 recycler.setAdapter(mAdapter);
             }
 
             @Override
-            public void onFailure(Call<List<Partido>> call, Throwable t) {
-                text.setText("oumama");
+            public void onFailure(Call<List<Partido>> call, Throwable t){
             }
 
         });

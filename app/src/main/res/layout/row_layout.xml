@@ -13,7 +13,7 @@
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Description"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="12sp" />
 
     <TextView
@@ -26,8 +26,8 @@
         android:layout_alignParentRight="true"
         android:gravity="center_vertical"
         android:text="Example application"
-        android:textColor="@color/colorPrimary"
-        android:textColorLink="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorLink="@color/colorPrimaryDark"
         android:textSize="16sp" />
 
 </RelativeLayout>
