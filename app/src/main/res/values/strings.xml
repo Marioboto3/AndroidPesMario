@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AndroidPesMario</string>
+    <string name="Login">Login</string>
+    <string name="Username">Username</string>
+    <string name="Password">Password</string>
+    <string name="titulo">MGAME</string>
+    <string name="registrar">REGISTER</string>
+    <string name="title">MGAME</string>
+    <string name="vacio" />
+</resources>
