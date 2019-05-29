@@ -7,10 +7,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class InfoPartido extends AppCompatActivity {
 
+    Apuesta apuesta;
+    String pronostico;
      Double cuotaApostada;
      TextView guanys;
+
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("http://192.168.43.238:9000/ApplicationAndroid/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    API api = retrofit.create(API.class);
+
+    Singleton singleton = Singleton.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +147,23 @@ public class InfoPartido extends AppCompatActivity {
         apostar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    apuesta = new Apuesta(1, pronostico, importe.getText().toString(), "mario");
+                    Call<String> call = api.createBet(apuesta);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (!response.isSuccessful()) {
+                            }
+                            guanys.setText(response.body());
+                        }
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t){
+                        }
+                    });
+                }
+                catch (Exception e)
+                {}
             }
             });
     }
