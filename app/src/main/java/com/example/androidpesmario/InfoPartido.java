@@ -2,15 +2,33 @@ package com.example.androidpesmario;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class InfoPartido extends AppCompatActivity {
 
      Double cuotaApostada;
      TextView guanys;
+     Apuesta apuesta;
+     String pronostico;
+
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("http://192.168.43.238:9000/ApplicationAndroid/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    API api = retrofit.create(API.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +113,7 @@ public class InfoPartido extends AppCompatActivity {
                 cuota2.setEnabled(false);
                 cuotaX.setEnabled(false);
                 cuotaApostada= Double.parseDouble(cuota1.getText().toString());
+                pronostico.equals("1");
             }
         });
         cuotaX.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +122,7 @@ public class InfoPartido extends AppCompatActivity {
                 cuota2.setEnabled(false);
                 cuota1.setEnabled(false);
                 cuotaApostada= Double.parseDouble(cuotaX.getText().toString());
+                pronostico = "X";
             }
         });
         cuota2.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +131,7 @@ public class InfoPartido extends AppCompatActivity {
                 cuota1.setEnabled(false);
                 cuotaX.setEnabled(false);
                 cuotaApostada= Double.parseDouble(cuota2.getText().toString());
+                pronostico= String.valueOf(2);
             }
         });
         ganancias.setOnClickListener(new View.OnClickListener() {
@@ -129,9 +150,28 @@ public class InfoPartido extends AppCompatActivity {
         apostar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    apuesta = new Apuesta(1, pronostico, importe.getText().toString(), "mario");
+                    Call<String> call = api.createBet(apuesta);
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (!response.isSuccessful()) {
+                            }
+                            guanys.setText(response.body());
+                        }
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t){
+                        }
+                    });
+                }
+                catch (Exception e)
+                {}
             }
             });
+
+
+
     }
     public void calculo(double cuota, double importe)
     {
