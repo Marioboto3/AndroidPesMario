@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 public class InfoPartido extends AppCompatActivity {
 
-     Double cuotaApostada;
-     TextView guanys;
+    Singleton singleton = Singleton.getInstance();
+
+    Double cuotaApostada;
+    TextView guanys;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class InfoPartido extends AppCompatActivity {
         final Button apostar = (Button) findViewById(R.id.apostar);
         guanys = (TextView) findViewById(R.id.guanysview);
 
-        String tit;
+        /*String tit;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -36,10 +38,11 @@ public class InfoPartido extends AppCompatActivity {
             }
         } else {
             tit =(String) savedInstanceState.getSerializable("Local");
-        }
-        local.setText(tit);
+        }*/
+        //local.setText(tit);
+        local.setText(singleton.getPartido().getLocal());
 
-        String tot;
+        /*String tot;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -49,9 +52,11 @@ public class InfoPartido extends AppCompatActivity {
             }
         } else {
             tot =(String) savedInstanceState.getSerializable("Visitante");
-        }
-        visitante.setText(tot);
-        String pep;
+        }*/
+        //visitante.setText(tot);
+        visitante.setText(singleton.getPartido().getVisitante());
+
+        /*String pep;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -61,10 +66,11 @@ public class InfoPartido extends AppCompatActivity {
             }
         } else {
             pep = (String) savedInstanceState.getSerializable("Cuota1");
-        }
-        cuota1.setText(pep);
+        }*/
+        //cuota1.setText(pep);
+        cuota1.setText(String.valueOf(singleton.getPartido().getCuota_1()));
 
-        String com;
+        /*String com;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -74,9 +80,11 @@ public class InfoPartido extends AppCompatActivity {
             }
         } else {
             com =(String) savedInstanceState.getSerializable("CuotaX");
-        }
-        cuotaX.setText(com);
-        String plas;
+        }*/
+        //cuotaX.setText(com);
+        cuotaX.setText(String.valueOf(singleton.getPartido().getCuota_X()));
+
+        /*String plas;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -86,8 +94,9 @@ public class InfoPartido extends AppCompatActivity {
             }
         } else {
             plas =(String) savedInstanceState.getSerializable("Cuota2");
-        }
-        cuota2.setText(plas);
+        }*/
+        //cuota2.setText(plas);
+        cuota2.setText(String.valueOf(singleton.getPartido().getCuota_2()));
 
         cuota1.setOnClickListener(new View.OnClickListener() {
             @Override

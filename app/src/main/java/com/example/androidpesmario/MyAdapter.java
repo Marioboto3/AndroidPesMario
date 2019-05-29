@@ -17,6 +17,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<Partido> values;
     Activity activity;
 
+    Singleton singleton = Singleton.getInstance();
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -74,14 +75,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 holder.txtHeader.setText(String.valueOf(partido.getLocal()));
 
                 Intent myIntent = new Intent(activity.getApplicationContext(), InfoPartido.class);
-                myIntent.putExtra("Local",partido.getLocal());
+                /*myIntent.putExtra("Local",partido.getLocal());
                 myIntent.putExtra("Visitante",partido.getVisitante());
                 String cuota1 = String.valueOf(partido.getCuota_1());
                 myIntent.putExtra("Cuota1",cuota1);
                 String cuotaX = String.valueOf(partido.getCuota_X());
                 myIntent.putExtra("CuotaX",cuotaX);
                 String cuota2 = String.valueOf(partido.getCuota_2());
-                myIntent.putExtra("Cuota2",cuota2);
+                myIntent.putExtra("Cuota2",cuota2);*/
+                singleton.setPartido(partido);
                 activity.startActivity(myIntent);
             }
         });

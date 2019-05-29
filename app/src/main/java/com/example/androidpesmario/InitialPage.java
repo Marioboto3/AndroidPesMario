@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -25,6 +27,8 @@ public class InitialPage extends AppCompatActivity{
 
     API api = retrofit.create(API.class);
 
+    Singleton singleton = Singleton.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +48,9 @@ public class InitialPage extends AppCompatActivity{
         } else {
             tit =(String) savedInstanceState.getSerializable("Username");
         }
-        username.setText(tit);
+        //username.setText(tit);
+
+        username.setText(singleton.getUsername());
 
         recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recycler.setHasFixedSize(true);
@@ -54,8 +60,13 @@ public class InitialPage extends AppCompatActivity{
             @Override
             public void onResponse(Call<List<Partido>> call, Response<List<Partido>> response) {
                 if (!response.isSuccessful()) {
-                    listDatos = response.body();
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Error: "+response.code(),
+                                Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
                 }
+
                 listDatos = response.body();
                 mAdapter = new MyAdapter(listDatos, InitialPage.this);
                 recycler.setAdapter(mAdapter);
@@ -67,5 +78,4 @@ public class InitialPage extends AppCompatActivity{
 
         });
     }
-
 }

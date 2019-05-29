@@ -17,6 +17,8 @@ import java.net.URL;
 
 public class Login extends AppCompatActivity {
 
+    Singleton singleton = Singleton.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,7 @@ public class Login extends AppCompatActivity {
                             if (result.equals("200")) {
                                 Intent myIntent = new Intent(Login.this, InitialPage.class);
                                 myIntent.putExtra("Username", username.getText().toString());
+                                singleton.setUsername(username.getText().toString());
                                 startActivity(myIntent);
                             }
                         }
