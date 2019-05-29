@@ -14,6 +14,6 @@ public interface API {
     @GET("getMatchDay")
     Call<List<Partido>> getPartidos();
 
-    @POST("apuesta")
-    Call<Apuesta> createBet(@Body Apuesta apuesta);
+    @POST("createBet")
+    Call<String> createBet(@Body Apuesta apuesta);
 }
