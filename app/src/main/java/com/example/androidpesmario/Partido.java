@@ -5,6 +5,7 @@ import java.sql.Time;
 
 public class Partido {
 
+    private int idPartido;
     private String local;
     private String visitante;
     private double cuota_1;
@@ -14,16 +15,22 @@ public class Partido {
     public Partido() {
     }
 
-    public Partido(String local, String visitante, double cuota_1, double cuota_X, double cuota_2) {
-
+    public Partido(int idPartido, String local, String visitante, double cuota_1, double cuota_X, double cuota_2) {
+        this.idPartido = idPartido;
         this.local = local;
         this.visitante = visitante;
         this.cuota_1 = cuota_1;
         this.cuota_X = cuota_X;
         this.cuota_2 = cuota_2;
-
     }
 
+    public int getIdPartido() {
+        return idPartido;
+    }
+
+    public void setIdPartido(int idPartido) {
+        this.idPartido = idPartido;
+    }
 
     public String getLocal() {
         return local;

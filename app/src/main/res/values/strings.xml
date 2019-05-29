@@ -7,4 +7,8 @@
     <string name="registrar">REGISTER</string>
     <string name="title">MGAME</string>
     <string name="vacio" />
+    <string name="tituloP">PARTIDO</string>
+    <string name="ganancias">Ganancias</string>
+    <string name="verganancias">Guanys</string>
+    <string name="apuesta">APOSTAR</string>
 </resources>

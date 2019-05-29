@@ -13,4 +13,7 @@ import retrofit2.http.Path;
 public interface API {
     @GET("getMatchDay")
     Call<List<Partido>> getPartidos();
+
+    @POST("apuesta")
+    Call<Apuesta> createBet(@Body Apuesta apuesta);
 }

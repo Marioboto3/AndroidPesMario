@@ -10,7 +10,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:layout_width="0dp"
-        android:layout_height="650dp"
+        android:layout_height="574dp"
         android:layout_marginTop="58dp"
         android:background="@color/colorAccent"
         android:clipToPadding="true"
@@ -23,5 +23,22 @@
         app:layout_constraintVertical_bias="1.0">
 
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/usernameInfo"
+        android:layout_width="106dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/my_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.415" />
 
 </android.support.constraint.ConstraintLayout>

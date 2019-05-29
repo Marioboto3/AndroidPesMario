@@ -19,7 +19,7 @@ public class InitialPage extends AppCompatActivity{
     RecyclerView.Adapter mAdapter;
 
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://192.168.43.63:9000/ApplicationAndroid/")
+            .baseUrl("http://192.168.43.238:9000/ApplicationAndroid/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
@@ -31,9 +31,25 @@ public class InitialPage extends AppCompatActivity{
         setContentView(R.layout.initialpage);
 
         recycler = (RecyclerView)findViewById(R.id.my_recycler_view);
+        TextView username = (TextView)findViewById(R.id.usernameInfo);
+
+        String tit;
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                tit= null;
+            } else {
+                tit=extras.getString("Username");
+            }
+        } else {
+            tit =(String) savedInstanceState.getSerializable("Username");
+        }
+        username.setText(tit);
+
         recycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recycler.setHasFixedSize(true);
         Call<List<Partido>> call = api.getPartidos();
+
         call.enqueue(new Callback<List<Partido>>() {
             @Override
             public void onResponse(Call<List<Partido>> call, Response<List<Partido>> response) {

@@ -74,8 +74,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 holder.txtHeader.setText(String.valueOf(partido.getLocal()));
 
                 Intent myIntent = new Intent(activity.getApplicationContext(), InfoPartido.class);
-                myIntent.putExtra("Local:",partido.getLocal());
+                myIntent.putExtra("Local",partido.getLocal());
                 myIntent.putExtra("Visitante",partido.getVisitante());
+                String cuota1 = String.valueOf(partido.getCuota_1());
+                myIntent.putExtra("Cuota1",cuota1);
+                String cuotaX = String.valueOf(partido.getCuota_X());
+                myIntent.putExtra("CuotaX",cuotaX);
+                String cuota2 = String.valueOf(partido.getCuota_2());
+                myIntent.putExtra("Cuota2",cuota2);
                 activity.startActivity(myIntent);
             }
         });

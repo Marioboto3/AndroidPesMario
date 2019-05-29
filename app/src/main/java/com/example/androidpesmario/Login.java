@@ -6,11 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.example.androidpesmario.R;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -35,11 +32,11 @@ public class Login extends AppCompatActivity {
             public void run() {
 
                 try {
-                     final EditText username = (EditText) findViewById(R.id.username);
+                     final EditText username = (EditText) findViewById(R.id.usernameInfo);
                      final EditText password = (EditText) findViewById(R.id.password);
                      final TextView passwordtext = (TextView) findViewById(R.id.passwordtext2);
 
-                    String query = String.format("http://192.168.43.63:9000/ApplicationAndroid/login?username=" + username.getText().toString() + "&pass=" + password.getText().toString());
+                    String query = String.format("http://192.168.43.238:9000/ApplicationAndroid/login?username=" + username.getText().toString() + "&pass=" + password.getText().toString());
                     URL url = new URL(query);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setReadTimeout(10000 );
@@ -68,8 +65,11 @@ public class Login extends AppCompatActivity {
                     //Codi correcte
                     handler.post(new Runnable() {
                         public void run() {
-                            Intent myIntent = new Intent(Login.this, InitialPage.class);
-                            startActivity(myIntent);
+                            if (result.equals("200")) {
+                                Intent myIntent = new Intent(Login.this, InitialPage.class);
+                                myIntent.putExtra("Username", username.getText().toString());
+                                startActivity(myIntent);
+                            }
                         }
                     });
 
