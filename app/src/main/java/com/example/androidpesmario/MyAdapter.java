@@ -72,8 +72,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.txtHeader.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.txtHeader.setText(String.valueOf(partido.getLocal()));
-
                 Intent myIntent = new Intent(activity.getApplicationContext(), InfoPartido.class);
                 /*myIntent.putExtra("Local",partido.getLocal());
                 myIntent.putExtra("Visitante",partido.getVisitante());

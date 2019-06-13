@@ -1,11 +1,23 @@
 package com.example.androidpesmario;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,8 +29,8 @@ public class InfoPartido extends AppCompatActivity {
 
     Apuesta apuesta;
     String pronostico;
-     Double cuotaApostada;
-     TextView guanys;
+    Double cuotaApostada;
+    TextView guanys;
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://192.168.43.238:9000/ApplicationAndroid/")
@@ -44,75 +56,26 @@ public class InfoPartido extends AppCompatActivity {
         final Button apostar = (Button) findViewById(R.id.apostar);
         guanys = (TextView) findViewById(R.id.guanysview);
 
-        String tit;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                tit= null;
-            } else {
-                tit=extras.getString("Local");
-            }
-        } else {
-            tit =(String) savedInstanceState.getSerializable("Local");
-        }
-        local.setText(tit);
+        local.setText(singleton.getPartido().getLocal());
 
-        String tot;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                tot= null;
-            } else {
-                tot=extras.getString("Visitante");
-            }
-        } else {
-            tot =(String) savedInstanceState.getSerializable("Visitante");
-        }
-        visitante.setText(tot);
-        String pep;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                pep= null;
-            } else {
-                pep=extras.getString("Cuota1");
-            }
-        } else {
-            pep = (String) savedInstanceState.getSerializable("Cuota1");
-        }
-        cuota1.setText(pep);
+        visitante.setText(singleton.getPartido().getVisitante());
 
-        String com;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                com= null;
-            } else {
-                com=extras.getString("CuotaX");
-            }
-        } else {
-            com =(String) savedInstanceState.getSerializable("CuotaX");
-        }
-        cuotaX.setText(com);
-        String plas;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                plas= null;
-            } else {
-                plas=extras.getString("Cuota2");
-            }
-        } else {
-            plas =(String) savedInstanceState.getSerializable("Cuota2");
-        }
-        cuota2.setText(plas);
+        cuota1.setText(Double.toString(singleton.getPartido().getCuota_1()));
+
+        cuotaX.setText(Double.toString(singleton.getPartido().getCuota_X()));
+
+        cuota2.setText(Double.toString(singleton.getPartido().getCuota_2()));
+
+        cuota1.setEnabled(true);
+        cuotaX.setEnabled(true);
+        cuota2.setEnabled(true);
 
         cuota1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cuota2.setEnabled(false);
                 cuotaX.setEnabled(false);
-                cuotaApostada= Double.parseDouble(cuota1.getText().toString());
+                cuotaApostada = Double.parseDouble(cuota1.getText().toString());
             }
         });
         cuotaX.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +83,7 @@ public class InfoPartido extends AppCompatActivity {
             public void onClick(View v) {
                 cuota2.setEnabled(false);
                 cuota1.setEnabled(false);
-                cuotaApostada= Double.parseDouble(cuotaX.getText().toString());
+                cuotaApostada = Double.parseDouble(cuotaX.getText().toString());
             }
         });
         cuota2.setOnClickListener(new View.OnClickListener() {
@@ -128,49 +91,89 @@ public class InfoPartido extends AppCompatActivity {
             public void onClick(View v) {
                 cuota1.setEnabled(false);
                 cuotaX.setEnabled(false);
-                cuotaApostada= Double.parseDouble(cuota2.getText().toString());
+                cuotaApostada = Double.parseDouble(cuota2.getText().toString());
             }
         });
         ganancias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try
-                {
+                try {
                     calculo(cuotaApostada, Double.parseDouble(importe.getText().toString()));
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     guanys.setText("Clica una cuota o pon un importe.");
                 }
             }
-            });
+        });
         apostar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    apuesta = new Apuesta(1, pronostico, importe.getText().toString(), "mario");
-                    Call<String> call = api.createBet(apuesta);
-                    call.enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            if (!response.isSuccessful()) {
+                new Thread(new Runnable() {
+                    InputStream stream = null;
+                    String str = "";
+                    String result = null;
+                    Handler handler = new Handler();
+                    public void run() {
+
+                        try {
+                            String query = String.format("http://192.168.43.238:9000/ApplicationAndroid/createBet");
+                            URL url = new URL(query);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.setReadTimeout(10000 );
+                            conn.setConnectTimeout(15000 /* milliseconds */);
+                            conn.setRequestMethod("POST");
+                            conn.setDoInput(true);
+                            conn.connect();
+                            stream = conn.getInputStream();
+
+                            JSONObject postDataParams = new JSONObject();
+                            postDataParams.put("username", singleton.getUsername());
+                            postDataParams.put("importe",importe.toString() );
+                            postDataParams.put("idPartido", singleton.getPartido().getIdPartido());
+                            postDataParams.put("pronostico", cuotaApostada.toString());
+
+                            Log.e("params", postDataParams.toString());
+
+                            BufferedReader reader = null;
+
+                            StringBuilder sb = new StringBuilder();
+
+                            reader = new BufferedReader(new InputStreamReader(stream));
+
+                            String line = null;
+                            while ((line = reader.readLine()) != null) {
+                                sb.append(line);
                             }
-                            guanys.setText(response.body());
+                            result = sb.toString();
+
+                            // Mostrar resultat en el quadre de text.
+                            // Codi incorrecte
+                            Log.i("message","Codigo incorrecto");
+
+                            //Codi correcte
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    if (result.equals("200")) {
+                                        Intent myIntent = new Intent(InfoPartido.this, InitialPage.class);
+                                        startActivity(myIntent);
+                                    }
+                                    else
+                                    {                    guanys.setText("Clica una cuota o pon un importe.");
+                                    }
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        @Override
-                        public void onFailure(Call<String> call, Throwable t){
-                        }
-                    });
-                }
-                catch (Exception e)
-                {}
+                    }
+                }).start();
             }
-            });
-    }
-    public void calculo(double cuota, double importe)
-    {
-        Double resultado=cuota*importe;
-        guanys.setText(resultado.toString());
+        });
     }
 
+    public void calculo(double cuota, double importe) {
+        Double resultado = cuota * importe;
+        guanys.setText(resultado.toString());
+    }
 }
+
