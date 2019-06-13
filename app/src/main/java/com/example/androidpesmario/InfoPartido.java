@@ -145,7 +145,6 @@ public class InfoPartido extends AppCompatActivity {
                             }
                             result = sb.toString();
 
-                            // Mostrar resultat en el quadre de text.
                             // Codi incorrecte
                             Log.i("message","Codigo incorrecto");
 
